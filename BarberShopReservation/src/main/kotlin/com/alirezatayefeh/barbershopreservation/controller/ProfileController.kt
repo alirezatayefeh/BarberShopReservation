@@ -25,7 +25,7 @@ class ProfileController @Autowired constructor(
         profileService.getProfile(userId)
     }
 
-    @PutMapping(value = ["upddate/{uuid}"])
+    @PutMapping(value = ["update/{uuid}"])
     fun updateProfile(
         @PathVariable("uuid") userId: UUID,
         @RequestBody profileDto: ProfileDto

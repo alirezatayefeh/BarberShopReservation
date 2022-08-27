@@ -24,7 +24,7 @@ class ReserveController @Autowired constructor(
         @RequestParam(value = "offset", defaultValue = "0") offset: Int,
         @RequestParam(value = "limit", defaultValue = "10") limit: Int
     ) {
-        val reserveList = reserveService.getAllReserveTimes()
+        val reserveList = reserveService.getAllReserveTimes(offset, limit)
     }
 
     @GetMapping(value = ["/reserve/{time}"])
