@@ -1,5 +1,8 @@
 package com.alirezatayefeh.barbershopreservation.model
 
+import PhoneNumberInvalidException
+import UserNameInvalidException
+import com.alirezatayefeh.barbershopreservation.security.Validation
 import java.io.Serializable
 import java.util.UUID
 
@@ -12,8 +15,11 @@ class ProfileDto : Serializable {
 
     fun validate(userId: UUID) {
         if (userName.isNullOrBlank() || userName.isNullOrEmpty() || userName!!.length > 30)
-            throw Exception()
+            throw UserNameInvalidException("UserName is invalid.")
 
-        userName?.let {  }
+        userName?.let { Validation.validateUser(it, userId) }
+
+        if (phoneNumber.isNullOrBlank() && phoneNumber.isNullOrEmpty())
+            throw PhoneNumberInvalidException("PhoneNumber is Invalid.")
     }
 }
