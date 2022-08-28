@@ -6,7 +6,7 @@ import com.alirezatayefeh.barbershopreservation.security.Validation
 import java.io.Serializable
 import java.util.UUID
 
-class ProfileDto : Serializable {
+class Profile : Serializable {
     var uuid: UUID? = null
     var phoneNumber: String? = null
     var userName: String? = null

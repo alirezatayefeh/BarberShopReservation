@@ -1,6 +1,6 @@
 package com.alirezatayefeh.barbershopreservation.controller
 
-import com.alirezatayefeh.barbershopreservation.model.ProfileDto
+import com.alirezatayefeh.barbershopreservation.model.Profile
 import com.alirezatayefeh.barbershopreservation.service.ProfileService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,8 +28,8 @@ class ProfileController @Autowired constructor(
     @PutMapping(value = ["update/{uuid}"])
     fun updateProfile(
         @PathVariable("uuid") userId: UUID,
-        @RequestBody profileDto: ProfileDto
+        @RequestBody profile: Profile
     ) {
-        profileService.updateProfile(userId, profileDto)
+        profileService.updateProfile(userId, profile)
     }
 }
