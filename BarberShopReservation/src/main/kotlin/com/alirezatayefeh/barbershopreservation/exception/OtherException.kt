@@ -1,5 +1,5 @@
-import com.alirezatayefeh.barbershopreservation.exception.base.BadRequestException
+class UserNameInvalidException(text: String) : Exception(text)
 
-class UserNameInvalidException(text: String) : BadRequestException()
+class PhoneNumberInvalidException(text: String) : Exception(text)
 
-class PhoneNumberInvalidException(text: String) : BadRequestException()
+class ReserveTimeIsNotExistException(text: String) : Exception(text)

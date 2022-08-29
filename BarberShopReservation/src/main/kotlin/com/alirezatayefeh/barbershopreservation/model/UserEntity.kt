@@ -1,5 +1,6 @@
 package com.alirezatayefeh.barbershopreservation.model
 
+import com.sun.istack.NotNull
 import org.hibernate.annotations.ColumnDefault
 import java.util.*
 import javax.persistence.*
@@ -8,7 +9,7 @@ import javax.persistence.*
 @Table(name = "users")
 class UserEntity {
     @Id
-    val uuid: UUID? = null
+    var uuid: UUID? = null
 
     @Column
     open var userName: String? = null
@@ -34,4 +35,11 @@ class UserEntity {
 
     @Column
     open var password: String? = null
+
+    @Column
+    open var reserveTime: Int? = null
+
+    @NotNull
+    @Column(name = "deletion_timestamp")
+    open var deletionTimestamp: Long = 0L
 }
