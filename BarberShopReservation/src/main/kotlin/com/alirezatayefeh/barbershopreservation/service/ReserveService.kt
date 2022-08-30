@@ -1,17 +1,20 @@
 package com.alirezatayefeh.barbershopreservation.service
 
+import ReserveTimeIsNotExistException
 import com.alirezatayefeh.barbershopreservation.model.ReserveDto
+import com.alirezatayefeh.barbershopreservation.model.ReserveEntity
 import com.alirezatayefeh.barbershopreservation.model.UserEntity
 import com.alirezatayefeh.barbershopreservation.repository.ReserveRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class ReserveService @Autowired constructor(
     private val reserveRepository: ReserveRepository,
 ) {
     fun getAllReserveTimes(offset: Int, limit: Int) {
-        TODO("Not yet implemented")
+
     }
 
     fun getReserveTime(time: Int) {
@@ -20,24 +23,33 @@ class ReserveService @Autowired constructor(
 
     fun setTime(reserveDto: ReserveDto) {
         val time = reserveDto.reserveTimes ?: error("time must not be null.")
-        val reserveTime = reserveTimeIsExist(time)
-        if (reserveTime)
+        val userId = reserveDto.userId ?: error("userId must not be null.")
+        val userEntity = reserveIsExistByUserIdAndTime(userId, time)
+        if (userEntity != null)
             return
 
-        UserEntity().apply {
+        ReserveEntity().apply {
             this.reserveTime = time
-            this.uuid = reserveDto.userId
+ //           this.userId =
         }.also {
             reserveRepository.save(it)
         }
     }
 
-    fun deleteTime(time: Int) {
-        TODO("Not yet implemented")
+    fun deleteTime(reserveDto: ReserveDto) {
+        val time = reserveDto.reserveTimes ?: error("time must not be  null.")
+        val userId = reserveDto.userId ?: error("userId must not be null.")
+
+        val userEntity = reserveIsExistByUserIdAndTime(userId, time)
+            ?: throw ReserveTimeIsNotExistException("User with userId: $userId does not reserve at $time")
+
+        ReserveEntity()?.apply {
+            this.deletionTimestamp = 0
+        }.also { reserveRepository.save(it) }
+
     }
 
-    private fun reserveTimeIsExist(time: Int): Boolean {
-        val userEntity = reserveRepository.findReserveByTime(time)
-        return userEntity == null
+    private fun reserveIsExistByUserIdAndTime(userId: UUID, time: Int): UserEntity? {
+        return  reserveRepository.findReserveByTimeAndUserId(userId, time)
     }
 }

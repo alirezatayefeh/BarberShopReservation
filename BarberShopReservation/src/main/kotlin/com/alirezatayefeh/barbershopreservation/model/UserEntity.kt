@@ -39,6 +39,9 @@ class UserEntity {
     @Column
     open var reserveTime: Int? = null
 
+    @OneToMany(mappedBy = "reserveTime")
+    open var user: MutableList<ReserveEntity>? = null
+
     @NotNull
     @Column(name = "deletion_timestamp")
     open var deletionTimestamp: Long = 0L
