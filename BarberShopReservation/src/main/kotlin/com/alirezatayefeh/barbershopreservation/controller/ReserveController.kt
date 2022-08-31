@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping(ReserveController.PATH)
@@ -21,12 +22,13 @@ class ReserveController @Autowired constructor(
         const val PATH = "/edge/v1/reserve"
     }
 
-    @GetMapping(value = ["/reserved"])
+    @GetMapping(value = ["/allReserve/{userId}"])
     fun getAllReservedTime(
         @RequestParam(value = "offset", defaultValue = "0") offset: Int,
-        @RequestParam(value = "limit", defaultValue = "10") limit: Int
+        @RequestParam(value = "limit", defaultValue = "10") limit: Int,
+        @PathVariable("userId") userId: UUID
     ) {
-        val reserveList = reserveService.getAllReserveTimes(offset, limit)
+        val reserveList = reserveService.getAllReserveTimes(offset, limit, userId)
     }
 
     @GetMapping(value = ["/reserve/{time}"])
@@ -39,8 +41,8 @@ class ReserveController @Autowired constructor(
         reserveService.setTime(reserveDto)
     }
 
-    @DeleteMapping(value = ["/delete/{time}"])
-    fun deleteTime(@PathVariable("time") time: Int) {
-        reserveService.deleteTime(time)
+    @DeleteMapping(value = ["/delete}"])
+    fun deleteTime(@RequestBody reserveDto: ReserveDto) {
+        reserveService.deleteTime(reserveDto)
     }
 }
