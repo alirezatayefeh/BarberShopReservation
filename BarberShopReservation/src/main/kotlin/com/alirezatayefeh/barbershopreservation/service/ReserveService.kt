@@ -3,6 +3,7 @@ package com.alirezatayefeh.barbershopreservation.service
 import ReserveTimeIsNotExistException
 import com.alirezatayefeh.barbershopreservation.model.ReserveDto
 import com.alirezatayefeh.barbershopreservation.model.ReserveEntity
+import com.alirezatayefeh.barbershopreservation.model.UserDto
 import com.alirezatayefeh.barbershopreservation.model.UserEntity
 import com.alirezatayefeh.barbershopreservation.repository.ReserveRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,12 +17,14 @@ class ReserveService @Autowired constructor(
 ) {
     fun getAllReserveTimes(offset: Int, limit: Int, userId: UUID) {
         val pageable = PageRequest.of(offset, limit)
-        reserveRepository.findReserveTimeBYUserId(userId, pageable)
+        val reserveTime = reserveRepository.findReserveTimeBYUserId(userId, pageable)
             ?: throw ReserveTimeIsNotExistException("$userId has not reserved any appointment yet")
     }
 
-    fun getReserveTime(time: Int) {
-        TODO("Not yet implemented")
+    fun getReserveTime(reserveDto: ReserveDto) {
+        val time = reserveDto.reserveTimes ?: error("time must not be null.")
+        val userId = reserveDto.userId ?: error("userId must not be null.")
+        reserveRepository.findReserveByTimeAndUserId(userId, time)
     }
 
     fun setTime(reserveDto: ReserveDto) {

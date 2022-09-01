@@ -31,9 +31,9 @@ class ReserveController @Autowired constructor(
         val reserveList = reserveService.getAllReserveTimes(offset, limit, userId)
     }
 
-    @GetMapping(value = ["/reserve/{time}"])
-    fun getReservedTime(@PathVariable("time") time: Int) {
-        val reserveTime = reserveService.getReserveTime(time)
+    @GetMapping(value = ["/reserve/"])
+    fun getReservedTime(@RequestBody reserveDto: ReserveDto) {
+        val reserveTime = reserveService.getReserveTime(reserveDto)
     }
 
     @PutMapping(value = ["/set"])

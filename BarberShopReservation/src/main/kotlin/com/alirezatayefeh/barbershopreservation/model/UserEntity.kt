@@ -2,12 +2,13 @@ package com.alirezatayefeh.barbershopreservation.model
 
 import com.sun.istack.NotNull
 import org.hibernate.annotations.ColumnDefault
+import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "users")
-class UserEntity {
+open class UserEntity: Serializable {
     @Id
     var uuid: UUID? = null
 
