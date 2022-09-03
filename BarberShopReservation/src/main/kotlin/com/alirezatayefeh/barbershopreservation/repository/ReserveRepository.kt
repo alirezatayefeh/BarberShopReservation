@@ -12,7 +12,7 @@ import java.util.UUID
 interface ReserveRepository : JpaRepository<ReserveEntity, Int> {
 
     @Query("from ReserveEntity r join r.userId u where u.uuid = :userId and r.deletionTimestamp = 0")
-    fun findReserveTimeBYUserId(userId: UUID, pageable: Pageable): UserEntity?
+    fun findReserveTimeBYUserId(userId: UUID, pageable: Pageable): List<UserEntity>
 
     @Query("from ReserveEntity r join r.userId u where u.uuid = :userId and r.reserveTime = :time and r.deletionTimestamp = 0")
     fun findReserveByTimeAndUserId(userId: UUID, time: Int): UserEntity?

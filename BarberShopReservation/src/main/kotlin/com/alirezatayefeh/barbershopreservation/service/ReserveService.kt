@@ -15,16 +15,18 @@ import java.util.UUID
 class ReserveService @Autowired constructor(
     private val reserveRepository: ReserveRepository,
 ) {
-    fun getAllReserveTimes(offset: Int, limit: Int, userId: UUID) {
+    fun getAllReserveTimes(offset: Int, limit: Int, userId: UUID): List<UserDto> {
         val pageable = PageRequest.of(offset, limit)
-        val reserveTime = reserveRepository.findReserveTimeBYUserId(userId, pageable)
-            ?: throw ReserveTimeIsNotExistException("$userId has not reserved any appointment yet")
+        return reserveRepository.findReserveTimeBYUserId(userId, pageable).map { it.toDto() }
     }
 
-    fun getReserveTime(reserveDto: ReserveDto) {
+    fun getReserveTime(reserveDto: ReserveDto): UserDto {
         val time = reserveDto.reserveTimes ?: error("time must not be null.")
         val userId = reserveDto.userId ?: error("userId must not be null.")
-        reserveRepository.findReserveByTimeAndUserId(userId, time)
+        val userEntity = reserveRepository.findReserveByTimeAndUserId(userId, time)
+            ?: throw ReserveTimeIsNotExistException("$userId has not reserved any appointment yet")
+
+        return userEntity.toDto()
     }
 
     fun setTime(reserveDto: ReserveDto) {
@@ -36,7 +38,7 @@ class ReserveService @Autowired constructor(
 
         ReserveEntity().apply {
             this.reserveTime = time
- //           this.userId =
+//          this.userId = ?
         }.also {
             reserveRepository.save(it)
         }
@@ -55,6 +57,6 @@ class ReserveService @Autowired constructor(
     }
 
     private fun reserveIsExistByUserIdAndTime(userId: UUID, time: Int): UserEntity? {
-        return  reserveRepository.findReserveByTimeAndUserId(userId, time)
+        return reserveRepository.findReserveByTimeAndUserId(userId, time)
     }
 }

@@ -46,4 +46,16 @@ open class UserEntity: Serializable {
     @NotNull
     @Column(name = "deletion_timestamp")
     open var deletionTimestamp: Long = 0L
+
+    fun toDto(): UserDto {
+        val userEntity = this
+        return UserDto().apply {
+            this.uuid = userEntity.uuid
+            this.userName = userEntity.userName
+            this.age = userEntity.age
+            this.role = userEntity.role
+            this.userStatus = userEntity.userStatus
+            this.isAdmin = userEntity.isAdmin
+        }
+    }
 }
