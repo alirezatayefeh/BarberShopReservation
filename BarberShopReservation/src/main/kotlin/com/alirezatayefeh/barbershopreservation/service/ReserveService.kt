@@ -51,7 +51,7 @@ class ReserveService @Autowired constructor(
         reserveIsExistByUserIdAndTime(userId, time)
             ?: throw ReserveTimeIsNotExistException("User with userId: $userId does not reserve at $time")
 
-        ReserveEntity()?.apply {
+        ReserveEntity().apply {
             this.deletionTimestamp = 0
         }.also { reserveRepository.save(it) }
     }
