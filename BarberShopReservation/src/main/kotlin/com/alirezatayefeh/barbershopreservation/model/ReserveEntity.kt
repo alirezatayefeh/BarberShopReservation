@@ -16,7 +16,7 @@ class ReserveEntity {
 
     @ManyToOne
     @JoinColumn(name = "uuid")
-    open var userId: UserEntity? = null
+    open var userEnt: UserEntity? = null
 
     @Column
     open var reserveTime: Int? = null
@@ -24,4 +24,13 @@ class ReserveEntity {
     @NotNull
     @javax.persistence.Column(name = "deletion_timestamp")
     open var deletionTimestamp: Long = 0L
+
+
+    fun toDto(): ReserveDto {
+        val reserveEntity = this
+        return ReserveDto().apply {
+            this.userEntity = reserveEntity.userEnt
+            this.reserveTimes = reserveEntity.reserveTime
+        }
+    }
 }

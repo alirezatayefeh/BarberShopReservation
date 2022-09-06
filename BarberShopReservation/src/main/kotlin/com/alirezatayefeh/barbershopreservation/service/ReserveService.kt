@@ -22,7 +22,7 @@ class ReserveService @Autowired constructor(
 
     fun getReserveTime(reserveDto: ReserveDto): UserDto {
         val time = reserveDto.reserveTimes ?: error("time must not be null.")
-        val userId = reserveDto.userId ?: error("userId must not be null.")
+        val userId = reserveDto.userEntity?.uuid ?: error("userId must not be null.")
         val userEntity = reserveRepository.findReserveByTimeAndUserId(userId, time)
             ?: throw ReserveTimeIsNotExistException("$userId has not reserved any appointment yet")
 
@@ -31,14 +31,14 @@ class ReserveService @Autowired constructor(
 
     fun setTime(reserveDto: ReserveDto) {
         val time = reserveDto.reserveTimes ?: error("time must not be null.")
-        val userId = reserveDto.userId ?: error("userId must not be null.")
+        val userId = reserveDto.userEntity?.uuid ?: error("userId must not be null.")
         val userEntity = reserveIsExistByUserIdAndTime(userId, time)
         if (userEntity != null)
             return
 
         ReserveEntity().apply {
             this.reserveTime = time
-//          this.userId = ?
+            this.userEnt = reserveDto.userEntity
         }.also {
             reserveRepository.save(it)
         }
@@ -46,7 +46,7 @@ class ReserveService @Autowired constructor(
 
     fun deleteTime(reserveDto: ReserveDto) {
         val time = reserveDto.reserveTimes ?: error("time must not be  null.")
-        val userId = reserveDto.userId ?: error("userId must not be null.")
+        val userId = reserveDto.userEntity?.uuid ?: error("userId must not be null.")
 
         reserveIsExistByUserIdAndTime(userId, time)
             ?: throw ReserveTimeIsNotExistException("User with userId: $userId does not reserve at $time")
